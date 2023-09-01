@@ -8,8 +8,8 @@
 // @description 08/31/2023, 23:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
 // @homepageURL https://github.com/FailedTech/ViolentMonkey
-// @updateURL   https://raw.githubusercontent.com/FailedTech/ViolentMonkey/main/VisaMetric.js
-// @downloadURL https://raw.githubusercontent.com/FailedTech/ViolentMonkey/main/VisaMetric.js
+// @updateURL   https://github.com/FailedTech/ViolentMonkey/raw/main/VisaMetric.user.js
+// @downloadURL https://github.com/FailedTech/ViolentMonkey/raw/main/VisaMetric.user.js
 // @require     https://code.jquery.com/jquery-3.6.0.min.js
 // @run-at      document-idle
 // ==/UserScript==
