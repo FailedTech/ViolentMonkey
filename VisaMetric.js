@@ -3,10 +3,11 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.002
+// @version     0.2
 // @author      FailedTech
 // @description 08/31/2023, 23:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
+// @homepageURL https://github.com/FailedTech/ViolentMonkey
 // @updateURL   https://raw.githubusercontent.com/FailedTech/ViolentMonkey/main/VisaMetric.js
 // @downloadURL https://raw.githubusercontent.com/FailedTech/ViolentMonkey/main/VisaMetric.js
 // @require     https://code.jquery.com/jquery-3.6.0.min.js
