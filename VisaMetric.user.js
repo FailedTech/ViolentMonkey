@@ -15,31 +15,21 @@
 // ==/UserScript==
 
 (() => {
-    let currentURL = window.location.href;
+    let pathName = window.location.pathname;
     let btnTrigger = (btnID) => {
         let btn = document.querySelector(btnID);
         btn ? btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
             : console.log(`Couldn't find the element: ${btnID}`);
     };
-    let subdir = {
-        '/en': { Func: () => { console.log('current url is:', currentURL); btnTrigger("#nationalWorkingBtn"); } },
-        '/en/': { Func: () => console.log('Performing Task A:', currentURL) },
-        '/ir': { Func: () => console.log('Performing Task B:', currentURL) },
-        '/ir/': { Func: () => console.log('Performing Task B:', currentURL) },
-        '/en/NationalWorking': { Func: () => console.log('Performing Task C:', currentURL) },
-        '/en/NationalWorking/': { Func: () => console.log('Performing Task C:', currentURL) },
-        '/ir/NationalWorking': { Func: () => console.log('Performing Task D:', currentURL) },
-        '/ir/NationalWorking/': { Func: () => console.log('Performing Task D:', currentURL) },
-        '/en/appointment-form': { Func: () => console.log('Performing Task E:', currentURL) },
-        '/en/appointment-form/': { Func: () => console.log('Performing Task E:', currentURL) },
-        '/ir/appointment-form': { Func: () => console.log('Performing Task F:', currentURL) },
-        '/ir/appointment-form/': { Func: () => console.log('Performing Task F:', currentURL) }
+    let subdirList = {
+        '/en|/en/|/ir|/ir/': { Func: () => { console.log('current page is: ', pathName); p_01(); } },
+        '/en/NationalWorking|/en/NationalWorking/|/ir/NationalWorking|/ir/NationalWorking/': { Func: () => { console.log('current page is: ', pathName); p_02(); } },
+        '/en/appointment-form|/en/appointment-form/|/ir/appointment-form|/ir/appointment-form/': { Func: () => console.log('current page is: ', pathName) }
     };
-
+    let p_01 = () => { observeNetworkChanges(); btnTrigger("#nationalWorkingBtn");};
+    let p_02 = () => { btnTrigger("#result1"); btnTrigger("#result3"); btnTrigger("#btnSubmit") }
     // Find the matching subdir
-    let matchedSubdir = subdir[Object.keys(subdir).find(url => currentURL === url)] || {
-        Func: () => console.log('No matching url:', currentURL)
-    };
-
-    matchedSubdir.Func(); // Execute the corresponding task function
+    let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
+    matchedSubdir ? subdirList[matchedSubdir].Func() : console.log('No matching url:', pathName);
+  
 })();
