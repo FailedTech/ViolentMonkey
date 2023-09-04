@@ -58,7 +58,7 @@
     let appCountLi = () => {
         let rtlinsert = [
             ["city", "teh", "https://it-ir-appointment.visametric.com/ir/appointment-form/getcity"],
-            ["office", "teh", ""],
+            ["office", "teh", "https://it-ir-appointment.visametric.com/ir/appointment-form/getoffice"],
             ["officetype", "normal", ""],
             ["totalPerson", "1", ""],
         ];
