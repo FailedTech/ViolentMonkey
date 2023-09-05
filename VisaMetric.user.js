@@ -19,7 +19,7 @@
     let btnTrigger = (btnID) => {
         let btn = document.querySelector(btnID);
         btn ? btn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
-            : console.log(`Couldn't find the element: ${btnID}`);
+            : console.log(`btnTrigger => Couldn't find the element: ${btnID}`);
     };
 
     let fetchdt = (url) => {
@@ -51,14 +51,16 @@
     let optionSelector = (id, txt) => {
         let el = document.querySelector(`#${id}`);
         let optionToSelect = [...el.options].find(option => option.innerHTML.toLowerCase().includes(txt.toLowerCase()));
-        return optionToSelect && (optionToSelect.selected = true, el.dispatchEvent(
-            new Event('change', { bubbles: true, cancelable: true })), true);
+        return optionToSelect
+            ? (optionToSelect.selected = true, el.dispatchEvent(new Event('change', { bubbles: true, cancelable: true })),
+                console.log(`optionSelector => ${id} ${txt} selected`), true)
+            : (console.log(`optionSelector => ${id} ${txt} not found`), false);
     };
 
     let appCountLi = () => {
         let rtlinsert = [
-            ["city", "teh", "https://it-ir-appointment.visametric.com/ir/appointment-form/getcity"],
-            ["office", "teh", "https://it-ir-appointment.visametric.com/ir/appointment-form/getoffice"],
+            ["city", "teh", "https://it-ir-appointment.visametric.com/en/appointment-form/getcity"],
+            ["office", "teh", "https://it-ir-appointment.visametric.com/en/appointment-form/getoffice"],
             ["officetype", "normal", ""],
             ["totalPerson", "1", ""],
         ];
@@ -66,19 +68,17 @@
         let [id, txt, url] = rtlinsert.shift();
 
         return !id
-            ? (console.log("All actions completed successfully"), undefined)
-            : optionSelector(id, txt)
+            ? (console.log("appCountLi => All actions completed successfully"), undefined)
+            : console.logoptionSelector(id, txt)
                 ? appCountLi()
-                : fetchdt(url).then((result) =>
-                    result
-                        ? appCountLi()
-                        : console.log(`Action ${id} failed.`)
-                );
+                : console.log("appCountLi => fetch request under development")
+                    ? appCountLi()
+                    : console.log(`Action get${id} failed.`)
     };
 
-    let findActiveNavTab = () =>
-        document.querySelector('.appCountLi.active')
-            ? appCountLi()
+    let findActiveNavTab = async () => {
+        await document.querySelector('.appCountLi.active')
+            ? (console.log("appointment_form => appCountLi is active"), appCountLi())
             : document.querySelector('.appPersonalInfoLi.active')
                 ? 'appPersonalInfoLi'
                 : document.querySelector('.appPreviewLi.active')
@@ -88,9 +88,11 @@
                         : document.querySelector('.appServicesLi.active')
                             ? 'appServicesLi'
                             : null;
+    }
+
 
     let subdirList = {
-        '/en|/en/|/ir|/ir/': {
+        '/en|/en/|/en/home|/en/home/|/ir|/ir/|/ir/home|/ir/home/': {
             Func: () => { console.log('current page is: ', pathName); p_01(); }
         },
         '/en/NationalWorking|/en/NationalWorking/|/ir/NationalWorking|/ir/NationalWorking/': {
@@ -111,6 +113,7 @@
 
     // Find the matching subdir
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
+
     matchedSubdir ? subdirList[matchedSubdir].Func() : console.log('No matching url:', pathName);
 
 })();
