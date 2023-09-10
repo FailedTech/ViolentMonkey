@@ -1,0 +1,110 @@
+    let addSelectedOption = (id, className, val, txt) => {
+        $(`#${id}`).length && ($(`#${id}`).append($('<option>', { value: val, text: txt }).attr('selected', 'selected')), className && $(`#${id}`).addClass(className));
+    };
+	
+	addSelectedOption("city","city","1","TEHRAN")
+	addSelectedOption("office","office","1","TEHRAN")
+	addSelectedOption("officetype","officetype","1","NORMAL")
+
+
+
+
+    $.ajax({
+  url: "https://it-ir-appointment.visametric.com/en/appointment-form/bankpayment-card-control",
+  type: "POST",
+  data: {
+    card: 5022291310533185,
+    date: "1402/04/26",
+    totalPerson: 1,
+    office: 1,
+    serviceType: 1,
+    consularID: 4
+  },
+  success: function (response) {
+    console.log(response);
+  },
+  error: function (error) {
+    // Handle any errors here
+    console.error(error);
+  },
+  xhrFields: {
+    withCredentials: true
+  }
+});
+
+
+
+
+$.ajax({
+  url: "https://it-ir-appointment.visametric.com/en/appointment-form/equaltransaction",
+  type: "POST",
+  data: {
+    paymentType:"atm",
+	card:5022291310533185,
+	paymentDate:"1402/04/26",
+	serviceType:1,
+	totalPerson:1,
+	getOfficeID:1,
+	getConsular:4,
+	cardPaymentID:"eyJpdiI6ImV1Y2U3YnZWZU1OYVZEQkRzNkxIalE9PSIsInZhbHVlIjoiTWtKeGl4VmdZRjJiRzdZZ1l1SjJKQT09IiwibWFjIjoiZTAwYjU2MGFjNTVkMjgwZWNkN2NkZmViYTI2ZDRmZDc1MmIzNGYwZGNiYzVmZmVhZDBkNjExOTYzNzZmY2U1YiJ9"
+  },
+  success: function (response) {
+    console.log(response);
+  },
+  error: function (error) {
+    console.error(error);
+  }
+});
+
+
+$.ajax({
+  url: "https://it-ir-appointment.visametric.com/en/NationalWorking",
+  type: "POST",
+  data: {
+    nationality:"Iran",
+    _token:$('meta[name="csrf-token"]').attr('content'),
+    jvnsAccess:"aT3g5o0i11"
+  },
+  success: function (response) {
+    console.log(response);
+  },
+  error: function (error) {
+    console.error(error);
+  }
+});
+
+
+    let cityOptions = [
+        { value: "0", text: "Place of Residence" },
+        { value: "9", text: "AHWAZ" },
+        { value: "6", text: "ARAK" },
+        { value: "7", text: "ARDEBIL" },
+        { value: "12", text: "BANDARABBAS" },
+        { value: "14", text: "BIRJAND" },
+        { value: "11", text: "BOJNORD" },
+        { value: "13", text: "BUSHEHR" },
+        { value: "2", text: "ESFEHAN" },
+        { value: "28", text: "GORGAN" },
+        { value: "29", text: "HAMEDAN" },
+        { value: "10", text: "ILAM" },
+        { value: "25", text: "KARAJ" },
+        { value: "26", text: "KERMAN" },
+        { value: "27", text: "KERMANSHAH" },
+        { value: "15", text: "KHORAMABAD" },
+        { value: "4", text: "MASHHAD" },
+        { value: "23", text: "QAZVIN" },
+        { value: "24", text: "QOM" },
+        { value: "16", text: "RASHT" },
+        { value: "21", text: "SANANDAJ" },
+        { value: "19", text: "SARI" },
+        { value: "20", text: "SEMNAN" },
+        { value: "22", text: "SHAHREKORD" },
+        { value: "5", text: "SHIRAZ" },
+        { value: "3", text: "TABRIZ" },
+        { value: "1", text: "TEHRAN" },
+        { value: "8", text: "URUMIEH" },
+        { value: "30", text: "YASUJ" },
+        { value: "31", text: "YAZD" },
+        { value: "17", text: "ZAHEDAN" },
+        { value: "18", text: "ZANJAN" }
+    ];
