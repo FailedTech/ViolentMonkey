@@ -5,7 +5,10 @@
 	addSelectedOption("city","city","1","TEHRAN")
 	addSelectedOption("office","office","1","TEHRAN")
 	addSelectedOption("officetype","officetype","1","NORMAL")
-
+$('.setnewcalendarstatus').val(2);
+$('.parentTotalFee').show();
+$('#paytype').show();
+$("#atm").trigger("click");
 
 
 
@@ -33,6 +36,39 @@
 });
 
 
+          $.ajax({
+                    url: "https://it-ir-appointment.visametric.com/en/appointment-form/bankpayment-card-control",
+                    method: 'POST',
+                    data: {
+    card: 5022291310533185,
+    date: "1402/04/26",
+    totalPerson: 1,
+    office: 1,
+    serviceType: 1,
+    consularID: 4
+                    },
+                    async: false,
+                    success: function (response) {
+                        if (!response.view) {
+                            $('#btnAppCountNext').fadeOut();
+                            $('#checkCardListDiv').html(' ');
+                            swal({
+                                title: "Warning",
+                                text: "Please check the accuracy of your payment information and try again.",
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: "OK",
+                                type: 'warning'
+                            });
+                        } else {
+                            $('#checkCardListDiv').html(response.view);
+                            $('#btnAppCountNext').fadeIn();
+
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
 
 
 $.ajax({
@@ -41,12 +77,12 @@ $.ajax({
   data: {
     paymentType:"atm",
 	card:5022291310533185,
-	paymentDate:"1402/04/26",
-	serviceType:1,
-	totalPerson:1,
-	getOfficeID:1,
-	getConsular:4,
-	cardPaymentID:"eyJpdiI6ImV1Y2U3YnZWZU1OYVZEQkRzNkxIalE9PSIsInZhbHVlIjoiTWtKeGl4VmdZRjJiRzdZZ1l1SjJKQT09IiwibWFjIjoiZTAwYjU2MGFjNTVkMjgwZWNkN2NkZmViYTI2ZDRmZDc1MmIzNGYwZGNiYzVmZmVhZDBkNjExOTYzNzZmY2U1YiJ9"
+paymentDate: "1402/06/20",
+serviceType: 1,
+totalPerson: 1,
+getOfficeID: 1,
+getConsular: 4
+cardPaymentID: "eyJpdiI6ImRscG13T2k2TnV6aUdnTkp0VVZYVWc9PSIsInZhbHVlIjoiYWlTVHVEODF4clcyL2x3aFRqaVB1QT09IiwibWFjIjoiYjViNGJjMWRhM2Q4OGMwMzBjMTVkNDI0YTYyYWU0ODBmOTI2MmUyMTBlNmVlM2EyN2U3ZWI4ZjgyMzU1Y2E0MiJ9"
   },
   success: function (response) {
     console.log(response);
@@ -56,6 +92,14 @@ $.ajax({
   }
 });
 
+
+
+card: 5022291310533185
+date: 1402/04/26
+totalPerson: 0
+office: 1
+serviceType: 1
+consularID: 4
 
 $.ajax({
   url: "https://it-ir-appointment.visametric.com/en/NationalWorking",
@@ -108,3 +152,9 @@ $.ajax({
         { value: "17", text: "ZAHEDAN" },
         { value: "18", text: "ZANJAN" }
     ];
+
+
+$('.setnewcalendarstatus').val(2);
+$('.parentTotalFee').show();
+$('#paytype').show();
+$("#atm").trigger("click");
