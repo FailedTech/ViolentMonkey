@@ -1,3 +1,6 @@
+var personCount = $(".totalPerson").val()
+
+
     let addSelectedOption = (id, className, val, txt) => {
         $(`#${id}`).length && ($(`#${id}`).append($('<option>', { value: val, text: txt }).attr('selected', 'selected')), className && $(`#${id}`).addClass(className));
     };

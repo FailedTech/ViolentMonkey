@@ -25,10 +25,9 @@
     };
 
     let passiveTab = (valLi, valTab) => {
-        ['appCountLi', 'appPersonalInfoLi', 'appServicesLi', 'appPreviewLi', 'appCalendarLi', 'appCreditCardLi', 'appCount', 'appPersonalInfo',
-            'appServices', 'appPreview', 'appCalendar', 'appServices'].forEach(item => item.endsWith('Li')
-                ? $('.' + item).removeClass('active')
-                : $('#' + item).removeClass('active in'));
+        ['appCountLi', 'appPersonalInfoLi', 'appPreviewLi', 'appCalendarLi', 'appServicesLi', 'appCreditCardLi'].forEach(item => {
+            $('.' + item).removeClass('active'); $('#' + item.replace('Li', '')).removeClass('active in');
+        });
         $('.' + valLi).addClass('active');
         $('#' + valTab).addClass('active in');
         window.scrollTo(0, 0);
@@ -36,10 +35,10 @@
 
     let appointmentForm = () => {
         $(".totalPerson").on("change", (e) => {
-            $(`.person${parseInt(e.currentTarget.value)}`).prevAll().show();
-            $(`.person${parseInt(e.currentTarget.value)}`).nextAll().hide();
+            $(`.person${parseInt(e.currentTarget.value)}`).prevAll().addBack().show();
+            $(`.person${parseInt(e.currentTarget.value)}`).nextAll().not(`.person${parseInt(e.currentTarget.value)}`).hide();
         });
-        $(".appCountLi, .appPersonalInfoLi, .appPreviewLi, .appCalendarLi, .appServicesLi").on("click", (e) => {
+        $(".appCountLi, .appPersonalInfoLi, .appPreviewLi, .appCalendarLi, .appServicesLi, .appCreditCardLi").on("click", (e) => {
             passiveTab($(e.currentTarget).attr("class"), $(e.currentTarget).attr("class").replace("Li", ""));
         });
         addSelectedOption("city", "city", "1", "TEHRAN")
@@ -51,12 +50,24 @@
         $('#paytype').show();
         $('#availableDayInfo').show();
         $("#atm").trigger("click");
-        $("#paymentCardInput").val(5022291310533185);
-        $("#popupDatepicker2").val("1402/06/20");
+        $("#paymentCardInput").val(6104338964005165);
+        $("#popupDatepicker2").val("1402/06/11");
+        $("#scheba_number").val("IR540120000000009663850619");
+        $("#scheba_name").val("ABEDIN FALLAHI");
+        $("#name1").val("ELAHE");
+        $("#surname1").val("FALLAHI");
+        $("#birthyear1").val("1991");
+        $("#birthmonth1").val("05");
+        $("#birthday1").val("05");
+        $("#passport1").val("X60422129");
+        $("#phone1").val("09127391660");
+        $("#email1").val("elahefallahi.91@yahoo.com");
     }
 
     let subdirList = {
-        '/en|/en/|/en/home|/en/home/|/ir|/ir/|/ir/home|/ir/home/|/it|/it/|/it/home|/it/home/':
+        '|/ir|/ir/|/ir/home|/ir/home/|/it|/it/|/it/home|/it/home/':
+            () => { window.location.pathname = "/en"; },
+        '/en|/en/|/en/home|/en/home/':
             () => { console.log('subdirList => current page is: ', pathName); home(); },
         '/en/NationalWorking|/en/NationalWorking/|/ir/NationalWorking|/ir/NationalWorking/|/it/NationalWorking|/it/NationalWorking/':
             () => { console.log('subdirList => current page is: ', pathName); nationalWorking(); },
