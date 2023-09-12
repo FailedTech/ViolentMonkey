@@ -158,3 +158,11 @@ $('.setnewcalendarstatus').val(2);
 $('.parentTotalFee').show();
 $('#paytype').show();
 $("#atm").trigger("click");
+
+
+let button = document.createElement("button");
+button.textContent = "Calender";
+button.addEventListener("click", function() {
+  console.log("clicked");
+});
+document.querySelector(".col-sm-6.text-center").appendChild(button);
