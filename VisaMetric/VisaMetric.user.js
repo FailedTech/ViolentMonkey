@@ -24,27 +24,31 @@
         $(`#${id}`).length && ($(`#${id}`).append($('<option>', { value: val, text: txt }).attr('selected', 'selected')), className && $(`#${id}`).addClass(className));
     };
 
-    let passiveTab = (valLi, valTab) => {
+    let navTab = (TabLi) => {
         ['appCountLi', 'appPersonalInfoLi', 'appPreviewLi', 'appCalendarLi', 'appServicesLi', 'appCreditCardLi'].forEach(item => {
             $('.' + item).removeClass('active'); $('#' + item.replace('Li', '')).removeClass('active in');
         });
-        $('.' + valLi).addClass('active');
-        $('#' + valTab).addClass('active in');
+        $('.' + TabLi).addClass('active');
+        $('#' + TabLi.replace('Li', '')).addClass('active in');
         window.scrollTo(0, 0);
     };
 
+    let PersonInfoForm = (FormCount) => {
+        $(`.person${FormCount}`).prevAll().addBack().show();
+        $(`.person${FormCount}`).nextAll().not(`.person${FormCount}`).hide();
+        console.log(`PersonInfoForm => Applicants changed to: ${FormCount}`);
+    }
+
     let appointmentForm = () => {
-        $(".totalPerson").on("change", (e) => {
-            $(`.person${parseInt(e.currentTarget.value)}`).prevAll().addBack().show();
-            $(`.person${parseInt(e.currentTarget.value)}`).nextAll().not(`.person${parseInt(e.currentTarget.value)}`).hide();
-        });
+        $(".totalPerson").on("change", () => { PersonInfoForm($(".totalPerson").val()) });
         $(".appCountLi, .appPersonalInfoLi, .appPreviewLi, .appCalendarLi, .appServicesLi, .appCreditCardLi").on("click", (e) => {
-            passiveTab($(e.currentTarget).attr("class"), $(e.currentTarget).attr("class").replace("Li", ""));
-        });
+            navTab($(e.currentTarget).attr('class').replace('.', ''))
+        })
         addSelectedOption("city", "city", "1", "TEHRAN")
         addSelectedOption("office", "office", "1", "TEHRAN")
         addSelectedOption("officetype", "officetype", "1", "NORMAL")
         $(".totalPerson").prop("selectedIndex", 1);
+        $(".totalPerson").val(1);
         $('.setnewcalendarstatus').val(2);
         $('.parentTotalFee').show();
         $('#paytype').show();
@@ -52,6 +56,7 @@
         $("#atm").trigger("click");
         $("#paymentCardInput").val(6104338964005165);
         $("#popupDatepicker2").val("1402/06/11");
+        PersonInfoForm($(".totalPerson").val())
         $("#scheba_number").val("IR540120000000009663850619");
         $("#scheba_name").val("ABEDIN FALLAHI");
         $("#name1").val("ELAHE");
@@ -62,6 +67,9 @@
         $("#passport1").val("X60422129");
         $("#phone1").val("09127391660");
         $("#email1").val("elahefallahi.91@yahoo.com");
+        $('.preview').html($('.personalInfoDiv').clone()).find('input, select').attr('disabled', 'disabled').css('border', 'none');
+        $('#previewchk').trigger("click");
+
     }
 
     let subdirList = {
