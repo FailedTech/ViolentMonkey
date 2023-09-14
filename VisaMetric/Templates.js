@@ -169,3 +169,19 @@ button.addEventListener("click", function() {
   console.log("clicked");
 });
 document.querySelector(".col-sm-6.text-center").appendChild(button);
+
+
+
+
+$.ajaxSetup({
+  headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
+//advance navigator
+// $().serialize() to show sending data
+$('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/NationalWorking').submit();
+$("#formAccessApplication").prepend('<input type="hidden" name="nationality" value="Iran">').submit();
+// get serialize in json format personalForm is form id
+$('#personalForm').serializeArray().reduce((obj, item) => (obj[item.name] = item.value, obj), {});
