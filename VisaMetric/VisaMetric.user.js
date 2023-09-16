@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.003
+// @version     0.1.004
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
@@ -141,6 +141,70 @@
             () => { console.log('subdirList => current page is: ', pathName); appointmentForm() }
     };
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
+
+    //----------------Custom JD MOD------------------------
+    let JD_getdate = () => {
+        $.ajax({
+            url: "https://it-ir-appointment.visametric.com/en/appointment-form/personal/getdate",
+            type: "POST",
+            async: false,
+            data: {
+                consularid: 4,
+                exitid: 1,
+                servicetypeid: 1,
+                calendarType: 2,
+                totalperson: 1,
+
+            },
+            success: function (getvaliddates) {
+
+                var enableDays = getvaliddates;
+                $("#datepicker").datepicker({
+                    maxViewMode: 2,
+                    weekStart: 1,
+                    beforeShowDay: function (date) {
+                        if (enableDays.indexOf(formatDate(date)) < 0)
+                            return {
+                                enabled: false
+                            }
+                        else
+                            return {
+                                enabled: true
+                            }
+                    },
+                    startDate: "+1d",
+                    endDate: "+2m",
+                    todayHighlight: true,
+                    format: "dd-mm-yyyy",
+                    clearBtn: true,
+                    autoclose: true
+                });
+                $("#datepicker").datepicker('update', enableDays)
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    let addBtn = () => {
+        $('.boardc').append(
+            $('<div class="JD-MOD-button-container"></div>').append(
+                '<button id="getDate" class="btn green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="sendDate" class="btn green" style="float: right;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>'
+            ))
+    }
+
+    let JD_Mod_Main = ()=>{
+        addBtn();
+        $("#getDate").on("click",()=>{JD_getdate();});
+        $("#sendDate").on("click",()=>{JD_getdate();});
+    }
+
+
+    JD_Mod_Main();
+    //----------------END OF JD MOD------------------------
     matchedSubdir ? subdirList[matchedSubdir]() : console.log('No matching url:', pathName);
 
 })();
