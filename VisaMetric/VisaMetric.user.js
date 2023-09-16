@@ -180,6 +180,7 @@
                     autoclose: true
                 });
                 $("#datepicker").datepicker('update', enableDays)
+                console.log("JD_getdate => valid dates : " , getvaliddates)
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
