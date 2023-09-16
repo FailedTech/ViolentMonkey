@@ -143,6 +143,7 @@
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
 
     //----------------Custom JD MOD------------------------
+
     let JD_getdate = () => {
         $.ajax({
             url: "https://it-ir-appointment.visametric.com/en/appointment-form/personal/getdate",
@@ -180,7 +181,7 @@
                     autoclose: true
                 });
                 $("#datepicker").datepicker('update', enableDays)
-                console.log("JD_getdate => valid dates : " , getvaliddates)
+                console.log("JD_getdate => valid dates :\n" , getvaliddates)
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -200,12 +201,14 @@
     let JD_Mod_Main = ()=>{
         addBtn();
         $("#getDate").on("click",()=>{JD_getdate();});
-        $("#sendDate").on("click",()=>{JD_getdate();});
+        $("#sendDate").on("click",()=>{alert("Comming Soon , Stay in touch")});
     }
 
 
     JD_Mod_Main();
+
     //----------------END OF JD MOD------------------------
+
     matchedSubdir ? subdirList[matchedSubdir]() : console.log('No matching url:', pathName);
 
 })();
