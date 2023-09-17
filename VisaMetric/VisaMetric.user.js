@@ -16,6 +16,20 @@
 (() => {
     let pathName = window.location.pathname;
 
+    /* xhr format bypass cors header
+    let ipify = () => {
+        let xhr = new XMLHttpRequest(); xhr.open("GET", "https://api.ipify.org?format=json", true);
+        xhr.onreadystatechange = () => {
+            xhr.readyState === 4 && xhr.status === 200
+            ? console.log("ipify => current ip : " + JSON.parse(xhr.responseText).ip)
+            : null;
+        }; xhr.send();
+    };
+    */
+
+    //ajax format bypass cors header with jsonp
+    let ipify = () => { $.ajax({ url: "https://api.ipify.org?format=jsonp", dataType: "jsonp", success: data => console.log("ipify => current ip : " + data.ip) }) }
+
     //let home = () => { $("#nationalWorkingBtn").trigger("click"); }
     let home = () => { $('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/NationalWorking').submit(); }
 
@@ -90,7 +104,7 @@
     let PersonInfoForm = (FormCount) => {
         $(`.person${FormCount}`).prevAll().addBack().show();
         $(`.person${FormCount}`).nextAll().not(`.person${FormCount}`).hide();
-        console.log(`PersonInfoForm => Applicants changed to: ${FormCount}`);
+        //console.log(`PersonInfoForm => Applicants changed to: ${FormCount}`);
     }
 
     let appointmentForm = () => {
@@ -181,7 +195,7 @@
                     autoclose: true
                 });
                 $("#datepicker").datepicker('update', enableDays)
-                console.log("JD_getdate => valid dates :\n" , getvaliddates)
+                console.log("JD_getdate => valid dates :\n", getvaliddates)
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -193,15 +207,15 @@
     let addBtn = () => {
         $('.boardc').append(
             $('<div class="JD-MOD-button-container"></div>').append(
-                '<button id="getDate" class="btn green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sendDate" class="btn green" style="float: right;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>'
+                '<button id="getDate" class="btn btn-warning green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="sendDate" class="btn btn-warning green" style="float: right;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>'
             ))
     }
 
-    let JD_Mod_Main = ()=>{
+    let JD_Mod_Main = () => {
         addBtn();
-        $("#getDate").on("click",()=>{JD_getdate();});
-        $("#sendDate").on("click",()=>{alert("Comming Soon , Stay in touch")});
+        $("#getDate").on("click", () => { JD_getdate(); });
+        $("#sendDate").on("click", () => { alert("Comming Soon , Stay in touch") });
     }
 
 
@@ -209,6 +223,6 @@
 
     //----------------END OF JD MOD------------------------
 
-    matchedSubdir ? subdirList[matchedSubdir]() : console.log('No matching url:', pathName);
+    matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
 
 })();

@@ -185,3 +185,113 @@ $('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/
 $("#formAccessApplication").prepend('<input type="hidden" name="nationality" value="Iran">').submit();
 // get serialize in json format personalForm is form id
 $('#personalForm').serializeArray().reduce((obj, item) => (obj[item.name] = item.value, obj), {});
+
+
+/* senddate response
+
+<div class="row">
+    <div class="col-md-2" style="margin-top:10px">
+        <button type="button" data-prime="0" class="btn btn-warning getdatebtnhour form-control noPrime" aria-hidden="true" style="height: 42px" data-all="" data-id="">
+            <i class="fa fa-clock-o" aria-hidden="true" title=""></i>
+            11:30
+ 
+        </button>
+    </div>
+    <div class="col-md-2" style="margin-top:10px">
+        <button type="button" data-prime="0" class="btn btn-warning getdatebtnhour form-control noPrime" aria-hidden="true" style="height: 42px" data-all="" data-id="">
+            <i class="fa fa-clock-o" aria-hidden="true" title=""></i>
+            15:30
+ 
+        </button>
+    </div>
+</div>
+<div class="row"></div>
+
+*/
+
+/*
+
+_token: 8BoxnVsXqhXhAxpN4sNzD1lZJ1sBrnE7dQzBlGP9
+applicationType: 4
+city: 1
+office: 1
+officetype: 1
+totalPerson: 1
+paytype: atm
+transactionid: 
+transactionDatePicker: 1402/06/26
+card: 6104338964005165
+cardDatepicker: 1402/06/11
+sheba_number: IR540120000000009663850619
+sheba_name: ABEDIN FALLAHI
+name1: ELAHE
+surname1: FALLAHI
+birthday1: 05
+birthmonth1: 05
+birthyear1: 1991
+passport1: X60422129
+phone1: 09127391660
+phone21: 
+email1: elahefallahi.91@yahoo.com
+alternativeemail1: 
+name2: 
+surname2: 
+birthday2: 0
+birthmonth2: 0
+birthyear2: 0
+passport2: 
+phone2: 
+phone22: 
+email2: 
+alternativeemail2: 
+name3: 
+surname3: 
+birthday3: 0
+birthmonth3: 0
+birthyear3: 0
+passport3: 
+phone3: 
+phone23: 
+email3: 
+alternativeemail3: 
+name4: 
+surname4: 
+birthday4: 0
+birthmonth4: 0
+birthyear4: 0
+passport4: 
+phone4: 
+phone24: 
+email4: 
+alternativeemail4: 
+name5: 
+surname5: 
+birthday5: 0
+birthmonth5: 0
+birthyear5: 0
+passport5: 
+phone5: 
+phone25: 
+email5: 
+alternativeemail5: 
+name6: 
+surname6: 
+birthday6: 0
+birthmonth6: 0
+birthyear6: 0
+passport6: 
+phone6: 
+phone26: 
+email6: 
+alternativeemail6: 
+previewchk: 1
+mailConfirmCode: 
+ctval: 
+qtallvert: 
+view_set_app_country: 
+biofpval: 6351656687fa8ffe135d980ebfdf62ba1817dd76
+view_set_app_office: 
+view_set_app_service_type: 
+setnewcalendarstatus: 2
+
+*/
