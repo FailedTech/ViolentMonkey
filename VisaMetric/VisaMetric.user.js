@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.004
+// @version     0.1.005
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
@@ -156,7 +156,18 @@
     };
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
 
+    matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
+
     //----------------Custom JD MOD------------------------
+
+    let personalinfo = () => {
+        return [...document.querySelectorAll('script')].map(scriptTag => {
+            let data = scriptTag.textContent.split('\n')
+                .find(line => line.includes('personalinfo:'))
+                ?.split('personalinfo:')[1]?.trim() || '';
+            return data.replace(/[^a-zA-Z0-9]/g, '');
+        }).filter(Boolean);
+    }
 
     let JD_getdate = () => {
         $.ajax({
@@ -165,10 +176,10 @@
             async: false,
             data: {
                 consularid: 4,
-                exitid: 1,
-                servicetypeid: 1,
-                calendarType: 2,
-                totalperson: 1,
+                exitid: $('.office').val(),
+                servicetypeid: $('.officetype').val(),
+                calendarType: $('.setnewcalendarstatus').val(),
+                totalperson: $(".totalPerson").val(),
 
             },
             success: function (getvaliddates) {
@@ -204,6 +215,31 @@
         });
     }
 
+    let JD_senddate = () => {
+        $.ajax({
+            url: "https://it-ir-appointment.visametric.com/en/appointment-form/senddate",
+            type: "POST",
+            async: false,
+            data: {
+                fulldate: $('.calendarinput').val(),
+                totalperson: $(".totalPerson").val(),
+                set_new_consular_id: 4,
+                set_new_exit_office_id: $('.office').val(),
+                calendarType: $('.setnewcalendarstatus').val(),
+                set_new_service_type_id: $('.officetype').val(),
+                personalinfo: personalinfo()[1],
+            },
+            success: function (response) {
+                $('.dateresult').html('');
+                $('.dateresult').show('slow');
+                $('.dateresult').html(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
     let addBtn = () => {
         $('.boardc').append(
             $('<div class="JD-MOD-button-container"></div>').append(
@@ -215,14 +251,12 @@
     let JD_Mod_Main = () => {
         addBtn();
         $("#getDate").on("click", () => { JD_getdate(); });
-        $("#sendDate").on("click", () => { alert("Comming Soon , Stay in touch") });
+        $("#sendDate").on("click", () => { JD_senddate(); });
     }
 
 
     JD_Mod_Main();
 
     //----------------END OF JD MOD------------------------
-
-    matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
 
 })();
