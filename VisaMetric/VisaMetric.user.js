@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.005
+// @version     0.1.006
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
@@ -29,6 +29,8 @@
 
     //ajax format bypass cors header with jsonp
     let ipify = () => { $.ajax({ url: "https://api.ipify.org?format=jsonp", dataType: "jsonp", success: data => console.log("ipify => current ip : " + data.ip) }) }
+
+    let liveToken = () => { console.log(`liveToken => current Token : ${$('meta[name="csrf-token"]').attr('content')}`) }
 
     //let home = () => { $("#nationalWorkingBtn").trigger("click"); }
     let home = () => { $('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/NationalWorking').submit(); }
@@ -92,6 +94,7 @@
         `)
     }
 
+    /* #navTab
     let navTab = (TabLi) => {
         ['appCountLi', 'appPersonalInfoLi', 'appPreviewLi', 'appCalendarLi', 'appServicesLi', 'appCreditCardLi'].forEach(item => {
             $('.' + item).removeClass('active'); $('#' + item.replace('Li', '')).removeClass('active in');
@@ -100,6 +103,14 @@
         $('#' + TabLi.replace('Li', '')).addClass('active in');
         window.scrollTo(0, 0);
     };
+    #navTab */
+
+    let navTab = () => {
+        $('.appCountLi, .appPersonalInfoLi, .appPreviewLi, .appCalendarLi, .appServicesLi, .appCreditCardLi').on("click", (e) => {
+            $("#" + $(e.currentTarget).attr('class').replace("Li", '')).addClass('active in').siblings('.fade.active.in').removeClass('active in');
+            $(e.currentTarget).addClass('active').siblings('li.active').removeClass('active');
+        });
+    }
 
     let PersonInfoForm = (FormCount) => {
         $(`.person${FormCount}`).prevAll().addBack().show();
@@ -108,10 +119,17 @@
     }
 
     let appointmentForm = () => {
+        liveToken();
         $(".totalPerson").on("change", () => { PersonInfoForm($(".totalPerson").val()) });
+
+        /* #navTab 
         $(".appCountLi, .appPersonalInfoLi, .appPreviewLi, .appCalendarLi, .appServicesLi, .appCreditCardLi").on("click", (e) => {
             navTab($(e.currentTarget).attr('class').replace('.', ''))
         })
+        #navTab */
+
+        navTab();
+
         //addSelectedOption("city", "city", "1", "TEHRAN")
         //addSelectedOption("office", "office", "1", "TEHRAN")
         //addSelectedOption("officetype", "officetype", "1", "NORMAL")
@@ -148,11 +166,11 @@
         '|/ir|/ir/|/ir/home|/ir/home/|/it|/it/|/it/home|/it/home/':
             () => { window.location.pathname = "/en"; },
         '/en|/en/|/en/home|/en/home/':
-            () => { console.log('subdirList => current page is: ', pathName); home(); },
+            () => { console.log('subdirList => current page : ', pathName); home(); },
         '/en/NationalWorking|/en/NationalWorking/|/ir/NationalWorking|/ir/NationalWorking/|/it/NationalWorking|/it/NationalWorking/':
-            () => { console.log('subdirList => current page is: ', pathName); nationalWorking(); },
+            () => { console.log('subdirList => current page : ', pathName); nationalWorking(); },
         '/en/appointment-form|/en/appointment-form/|/ir/appointment-form|/ir/appointment-form/|/it/appointment-form|/it/appointment-form/':
-            () => { console.log('subdirList => current page is: ', pathName); appointmentForm() }
+            () => { console.log('subdirList => current page : ', pathName); appointmentForm() }
     };
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
 
@@ -244,7 +262,9 @@
         $('.boardc').append(
             $('<div class="JD-MOD-button-container"></div>').append(
                 '<button id="getDate" class="btn btn-warning green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sendDate" class="btn btn-warning green" style="float: right;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>'
+                '<button id="sendDate" class="btn btn-warning green" style="float: left;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="calenderNext" class="btn btn-warning green" style="float: right;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="stopTimer" class="btn btn-warning green" style="float: right;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
             ))
     }
 
@@ -252,6 +272,8 @@
         addBtn();
         $("#getDate").on("click", () => { JD_getdate(); });
         $("#sendDate").on("click", () => { JD_senddate(); });
+        $("#stopTimer").on("click", () => { clearInterval(x); });
+        $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click") });
     }
 
 
