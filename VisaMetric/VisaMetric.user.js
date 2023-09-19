@@ -251,6 +251,7 @@
                 $('.dateresult').html('');
                 $('.dateresult').show('slow');
                 $('.dateresult').html(response);
+                console.log(`JD_senddate =>\n ${response}`);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // console.log(textStatus, errorThrown);
