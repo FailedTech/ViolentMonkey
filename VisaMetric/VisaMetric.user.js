@@ -178,6 +178,28 @@
 
     //----------------Custom JD MOD------------------------
 
+    // execute the script with the id ==> eval(document.querySelector("#scriptId").textContent)
+    let scriptModifier = {
+        txtReplace: (oldTxt, newTxt, scriptId) => {
+            document.querySelectorAll('script').forEach(s => {
+                s.textContent.includes(oldTxt) ?
+                    s.parentNode.replaceChild(Object.assign(document.createElement('script'), {
+                        textContent: s.textContent.replace(oldTxt, newTxt), id: scriptId
+                    }), s)
+                    : console.log("scriptModifier => no matching txt found");
+            });
+        },
+        scriptReplace: (oldTxt, newTxt, scriptId) => {
+            document.querySelectorAll('script').forEach(s => {
+                s.textContent.includes(oldTxt)
+                    ? s.parentNode.replaceChild(Object.assign(document.createElement('script'), {
+                        textContent: newTxt, id: scriptId
+                    }), s)
+                    : console.log("scriptModifier => no matching txt found");
+            });
+        }
+    }
+
     let personalinfo = () => {
         return [...document.querySelectorAll('script')].map(scriptTag => {
             let data = scriptTag.textContent.split('\n')
@@ -265,15 +287,20 @@
                 '<button id="getDate" class="btn btn-warning green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
                 '<button id="sendDate" class="btn btn-warning green" style="float: left;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
                 '<button id="calenderNext" class="btn btn-warning green" style="float: right;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="stopTimer" class="btn btn-warning green" style="float: right;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
+                '<button id="sTimer" class="btn btn-warning green" style="float: right;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
             ))
     }
 
     let JD_Mod_Main = () => {
         addBtn();
-        $("#getDate").on("click", () => { JD_getdate(); });
+        $("#getDate").on("click", () => {
+            JD_getdate();
+            //scriptModifier.txtReplace(`totalperson: personCount`, `totalperson: \$(".totalPerson").val()`, "daterqfixed")
+        });
         $("#sendDate").on("click", () => { JD_senddate(); });
-        $("#stopTimer").on("click", () => { clearInterval(x); });
+        $("#sTimer").on("click", () => {
+            scriptModifier.scriptReplace(`document.getElementById("watch").innerHTML = "<b>" + minutes + "m " + seconds + "s </b>";`, `clearInterval(x);`, 'sTimer_script');
+        });
         $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click") });
     }
 
