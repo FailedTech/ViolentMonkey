@@ -127,7 +127,6 @@
             navTab($(e.currentTarget).attr('class').replace('.', ''))
         })
         #navTab */
-
         navTab();
 
         //addSelectedOption("city", "city", "1", "TEHRAN")
@@ -135,10 +134,12 @@
         //addSelectedOption("officetype", "officetype", "1", "NORMAL")
         //$(".totalPerson").prop("selectedIndex", 1);
         addSelectedOption();
+
         $(".city").val(1);
         $(".office").val(1);
         $(".officetype").val(1);
         $(".totalPerson").val(1);
+        personCount = $(".totalPerson").val();
         $('.setnewcalendarstatus').val(2);
         $('.parentTotalFee').show();
         $('#paytype').show();
@@ -146,7 +147,6 @@
         $("#atm").trigger("click");
         $("#paymentCardInput").val(6104338964005165);
         $("#popupDatepicker2").val("1402/06/11");
-        PersonInfoForm($(".totalPerson").val())
         $("#scheba_number").val("IR540120000000009663850619");
         $("#scheba_name").val("ABEDIN FALLAHI");
         $("#name1").val("ELAHE");
@@ -157,6 +157,7 @@
         $("#passport1").val("X60422129");
         $("#phone1").val("09127391660");
         $("#email1").val("elahefallahi.91@yahoo.com");
+        PersonInfoForm($(".totalPerson").val());
         $('.preview').html($('.personalInfoDiv').clone()).find('input, select').attr('disabled', 'disabled').css('border', 'none');
         $('#previewchk').trigger("click");
 
