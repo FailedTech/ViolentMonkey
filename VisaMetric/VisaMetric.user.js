@@ -28,7 +28,18 @@
     */
 
     //ajax format bypass cors header with jsonp
-    let ipify = () => { $.ajax({ url: "https://api.ipify.org?format=jsonp", dataType: "jsonp", success: data => console.log("ipify => current ip : " + data.ip) }) }
+    //let ipify = () => { $.ajax({ url: "https://api.ipify.org?format=jsonp", dataType: "jsonp", success: data => console.log("ipify => current ip : " + data.ip) }) }
+    let ipify = async () => {
+        let f = async (u, i) => {
+            try {
+                let v = await new Promise((r) =>
+                    $.ajax({ url: u, dataType: "jsonp", success: (d) => r(d.ip), error: () => r(null) })
+                );
+                v && console.log(`ipify => ${i} :`, v);
+            } catch (e) { }
+        };
+        await f('https://api64.ipify.org?format=jsonp', 'IPv6'), f('https://api.ipify.org?format=jsonp', 'IPv4');
+    };
 
     let liveToken = () => { console.log(`liveToken => current Token : ${$('meta[name="csrf-token"]').attr('content')}`) }
 
@@ -167,11 +178,11 @@
         '|/ir|/ir/|/ir/home|/ir/home/|/it|/it/|/it/home|/it/home/':
             () => { window.location.pathname = "/en"; },
         '/en|/en/|/en/home|/en/home/':
-            () => { console.log('subdirList => current page : ', pathName); home(); },
+            () => { home(); },
         '/en/NationalWorking|/en/NationalWorking/|/ir/NationalWorking|/ir/NationalWorking/|/it/NationalWorking|/it/NationalWorking/':
-            () => { console.log('subdirList => current page : ', pathName); nationalWorking(); },
+            () => { nationalWorking(); },
         '/en/appointment-form|/en/appointment-form/|/ir/appointment-form|/ir/appointment-form/|/it/appointment-form|/it/appointment-form/':
-            () => { console.log('subdirList => current page : ', pathName); appointmentForm() }
+            () => { appointmentForm(); }
     };
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
 
@@ -185,9 +196,9 @@
             document.querySelectorAll('script').forEach(s => {
                 s.textContent.includes(oldTxt) ?
                     s.parentNode.replaceChild(Object.assign(document.createElement('script'), {
-                        textContent: s.textContent.replace(oldTxt, newTxt), id: scriptId
+                        textContent: s.textContent.replace(new RegExp(oldTxt, 'g'), newTxt), id: scriptId
                     }), s)
-                    : console.log("scriptModifier => no matching txt found");
+                    : null;
             });
         },
         scriptReplace: (oldTxt, newTxt, scriptId) => {
@@ -196,7 +207,7 @@
                     ? s.parentNode.replaceChild(Object.assign(document.createElement('script'), {
                         textContent: newTxt, id: scriptId
                     }), s)
-                    : console.log("scriptModifier => no matching txt found");
+                    : null;
             });
         }
     }
@@ -220,35 +231,24 @@
                 exitid: $('.office').val(),
                 servicetypeid: $('.officetype').val(),
                 calendarType: $('.setnewcalendarstatus').val(),
-                totalperson: $(".totalPerson").val(),
-
+                totalperson: $(".totalPerson").val()
             },
-            success: function (getvaliddates) {
-
-                var enableDays = getvaliddates;
+            success: (enableDays) => {
                 $("#datepicker").datepicker({
                     maxViewMode: 2,
                     weekStart: 1,
-                    beforeShowDay: function (date) {
-                        if (enableDays.indexOf(formatDate(date)) < 0)
-                            return {
-                                enabled: false
-                            }
-                        else
-                            return {
-                                enabled: true
-                            }
-                    },
+                    beforeShowDay: (date) => ({
+                        enabled: enableDays.indexOf(formatDate(date)) >= 0
+                    }),
                     startDate: "+1d",
                     endDate: "+2m",
                     todayHighlight: true,
                     format: "dd-mm-yyyy",
                     clearBtn: true,
                     autoclose: true
-                });
-                $("#datepicker").datepicker('update', enableDays)
-                console.log("JD_getdate => valid dates :\n", getvaliddates)
+                }).datepicker('update', enableDays);
 
+                console.log("JD_getdate => valid dates :\n", enableDays);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // console.log(textStatus, errorThrown);
@@ -285,10 +285,10 @@
     let addBtn = () => {
         $('.boardc').append(
             $('<div class="JD-MOD-button-container"></div>').append(
-                '<button id="getDate" class="btn btn-warning green" style="float: left;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sendDate" class="btn btn-warning green" style="float: left;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="calenderNext" class="btn btn-warning green" style="float: right;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sTimer" class="btn btn-warning green" style="float: right;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
+                '<button id="getDate" class="btn btn-warning green" style="float: left; font-size: 10px;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="sendDate" class="btn btn-warning green" style="float: left; font-size: 10px;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="calenderNext" class="btn btn-warning green" style="float: right; font-size: 10px;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
+                '<button id="sTimer" class="btn btn-warning green" style="float: right; font-size: 10px;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
             ))
     }
 
@@ -303,6 +303,18 @@
             scriptModifier.scriptReplace(`document.getElementById("watch").innerHTML = "<b>" + minutes + "m " + seconds + "s </b>";`, `clearInterval(x);`, 'sTimer_script');
         });
         $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click") });
+        $(".input-group-addon").on("click", () => {
+            $("#datepicker").datepicker({
+                maxViewMode: 2,
+                weekStart: 1,
+                startDate: "+1d",
+                endDate: "+2m",
+                todayHighlight: true,
+                format: "dd-mm-yyyy",
+                clearBtn: true,
+                autoclose: true
+            })
+        })
     }
 
 
