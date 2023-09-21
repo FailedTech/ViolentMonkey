@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.006
+// @version     0.1.007
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
@@ -38,7 +38,8 @@
                 v && console.log(`ipify => ${i} :`, v);
             } catch (e) { }
         };
-        await f('https://api64.ipify.org?format=jsonp', 'IPv6'), f('https://api.ipify.org?format=jsonp', 'IPv4');
+        await f('https://api.ipify.org?format=jsonp', 'IP');
+        //await f('https://api64.ipify.org?format=jsonp', 'IPv6'), f('https://api.ipify.org?format=jsonp', 'IPv4');
     };
 
     let liveToken = () => { console.log(`liveToken => current Token : ${$('meta[name="csrf-token"]').attr('content')}`) }
@@ -221,6 +222,13 @@
         }).filter(Boolean);
     }
 
+    let rndClock = () => {
+        let $c = $(".fa-clock-o").eq(Math.floor(Math.random() * $(".fa-clock-o").length));
+        ct = $c.data("id");
+        qtallvertval = $c.data("all");
+        $c.trigger("click");
+    }
+
     let JD_getdate = () => {
         $.ajax({
             url: "https://it-ir-appointment.visametric.com/en/appointment-form/personal/getdate",
@@ -257,6 +265,7 @@
     }
 
     let JD_senddate = () => {
+        $('.calendarinput').val($(".JDcalendarinput").val() !== "" ? $(".JDcalendarinput").val() : $('.calendarinput').val())
         $.ajax({
             url: "https://it-ir-appointment.visametric.com/en/appointment-form/senddate",
             type: "POST",
@@ -274,7 +283,9 @@
                 $('.dateresult').html('');
                 $('.dateresult').show('slow');
                 $('.dateresult').html(response);
-                console.log(`JD_senddate =>\n ${response}`);
+                $(".fa-clock-o").length
+                    ? (rndClock(), $('#btnAppCalendarNext').trigger("click"))
+                    : console.log(`JD_senddate => no available time\n ${response}`);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // console.log(textStatus, errorThrown);
@@ -284,12 +295,13 @@
 
     let addBtn = () => {
         $('.boardc').append(
-            $('<div class="JD-MOD-button-container"></div>').append(
-                '<button id="getDate" class="btn btn-warning green" style="float: left; font-size: 10px;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sendDate" class="btn btn-warning green" style="float: left; font-size: 10px;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="calenderNext" class="btn btn-warning green" style="float: right; font-size: 10px;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
-                '<button id="sTimer" class="btn btn-warning green" style="float: right; font-size: 10px;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>'
-            ))
+            '<div class="JD-MOD-button-container"></div>',
+            '<button id="getDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+            '<button id="sendDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
+            '<button id="calenderNext" class="btn btn-success" style="float: right; padding: 5px 10px;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
+            '<button id="sTimer" class="btn btn-success" style="float: right; padding: 5px 10px;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>',
+            '<input class="form-control JDcalendarinput" type="text" placeholder="mm-dd-yyyy" style="cursor: pointer; width: 120px;">'
+        )
     }
 
     let JD_Mod_Main = () => {
@@ -302,7 +314,7 @@
         $("#sTimer").on("click", () => {
             scriptModifier.scriptReplace(`document.getElementById("watch").innerHTML = "<b>" + minutes + "m " + seconds + "s </b>";`, `clearInterval(x);`, 'sTimer_script');
         });
-        $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click") });
+        $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click"); });
         $(".input-group-addon").on("click", () => {
             $("#datepicker").datepicker({
                 maxViewMode: 2,
@@ -316,7 +328,6 @@
             })
         })
     }
-
 
     JD_Mod_Main();
 
