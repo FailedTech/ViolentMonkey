@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.007
+// @version     0.1.008
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
