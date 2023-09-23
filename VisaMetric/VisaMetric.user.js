@@ -313,7 +313,7 @@
             <input type="text" id="jdCalendarInput" class="form-control custom-input" placeholder="dd-mm-yyyy" style="
                 width: 137.66666px;
                 padding: 5px;
-                padding-left: 30px;
+                padding-left: 25px;
                 border-left-width: 1px;
                 margin-left: 30px;">
             </div>
