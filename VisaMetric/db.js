@@ -192,10 +192,10 @@ let indxDB = {
 
         request.onupgradeneeded = (e) => {
             let db = e.target.result;
-            !db.objectStoreNames.contains(storeName) && db.createObjectStore(storeName);
+            !db.objectStoreNames.contains(storeName) && db.createObjectStore(storeName, { keyPath: 'username' });
         };
 
-        request.onsuccess = (e) => resolve(e.target.result.transaction(storeName, mode).objectStore(storeName));
+        request.onsuccess = (e) => resolve(e.target.result.transaction(storeName, mode).objectStore(storeName),console.log("store transaction done"));
         request.onerror = (e) => reject(e.target.error);
     }),
 
@@ -206,7 +206,7 @@ let indxDB = {
     }),
 
     add: async (store, key, newData) => new Promise((resolve, reject) => {
-        const request = store.add(newData, key); // Provide a key here
+        const request = store.add(newData, key);
         request.onsuccess = (e) => resolve();
         request.onerror = (e) => reject(e.target.error);
     }),
@@ -219,7 +219,11 @@ let indxDB = {
 };
 
 
-// Example usage of indxDB object
+let newData = {
+    id: 1,
+    username: "F U",
+    name1: "F U = fuck you"
+};
 
 // Open the database and initiate a transaction
 indxDB.open("MyDatabase", 1, "myStore", "readwrite")
@@ -245,8 +249,88 @@ indxDB.open("MyDatabase", 1, "myStore", "readwrite")
   });
 
 
+
+indxDB.open("VisaMetric",1,"userdata").put(newData)
+
+
+
+
+//--------------------------------------------------------------------
+
+let indxDB = {
+    open: async (dbName, version, storeName, mode) => {
+        return new Promise((resolve, reject) => {
+            let request = indexedDB.open(dbName, version);
+
+            request.onupgradeneeded = (e) => {
+                let db = e.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName, { keyPath: 'username' });
+                }
+            };
+
+            request.onsuccess = (e) => {
+                let db = e.target.result;
+                let transaction = db.transaction(storeName, mode);
+                let store = transaction.objectStore(storeName);
+                resolve(store);
+            };
+
+            request.onerror = (e) => reject(e.target.error);
+        });
+    },
+
+    objectStore: async (dbName, version, storeName, mode) => {
+        const store = await indxDB.open(dbName, version, storeName, mode);
+        return store;
+    },
+
+    add: async (dbName, version, storeName, mode, newData) => {
+        const store = await indxDB.objectStore(dbName, version, storeName, mode);
+
+        return new Promise((resolve, reject) => {
+            let request = store.add(newData);
+            request.onsuccess = (e) => resolve();
+            request.onerror = (e) => reject(e.target.error);
+        });
+    },
+
+    put: async (dbName, version, storeName, mode, newData) => {
+        const store = await indxDB.objectStore(dbName, version, storeName, mode);
+
+        return new Promise((resolve, reject) => {
+            let request = store.put(newData);
+            request.onsuccess = (e) => resolve();
+            request.onerror = (e) => reject(e.target.error);
+        });
+    },
+
+    delete: async (dbName, version, storeName, mode, key) => {
+        const store = await indxDB.objectStore(dbName, version, storeName, mode);
+
+        return new Promise((resolve, reject) => {
+            let request = store.delete(key);
+            request.onsuccess = (e) => resolve();
+            request.onerror = (e) => reject(e.target.error);
+        });
+    },
+};
+
+// Example usage of indxDB object
 let newData = {
     username: "F U",
-    name1: "F U = fuck you"
+    name1: "F U = fuck you",
 };
-indxDB.open("VisaMetric",1,"userdata").put(newData)
+
+const dbName = "MyDatabase";
+const version = 1;
+const storeName = "myStore";
+const mode = "readwrite";
+
+indxDB.add(dbName, version, storeName, mode, newData)
+    .then(() => {
+        console.log("Data has been successfully added.");
+    })
+    .catch((error) => {
+        console.error("Error: ", error);
+    });
