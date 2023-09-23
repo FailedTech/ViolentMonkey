@@ -224,6 +224,7 @@
 
     let rndClock = () => {
         let $c = $(".fa-clock-o").eq(Math.floor(Math.random() * $(".fa-clock-o").length));
+        console.log(`rndClock => Time : ${$c.parent().text().trim()}`);
         ct = $c.data("id");
         qtallvertval = $c.data("all");
         $c.trigger("click");
