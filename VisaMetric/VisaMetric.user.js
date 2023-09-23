@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       *://it-ir-appointment.visametric.com/*
 // @grant       GM.registerMenuCommand
-// @version     0.1.007
+// @version     0.1.008
 // @author      FailedTech
 // @description 09/11/2023, 13:00:00 PM
 // @icon        https://www.visametric.com/front/images/common/favicon.png
@@ -38,7 +38,7 @@
                 v && console.log(`ipify => ${i} :`, v);
             } catch (e) { }
         };
-        await f('https://api.ipify.org?format=jsonp', 'IP');
+        await f('https://api64.ipify.org?format=jsonp', 'IP');
         //await f('https://api64.ipify.org?format=jsonp', 'IPv6'), f('https://api.ipify.org?format=jsonp', 'IPv4');
     };
 
@@ -266,7 +266,6 @@
     }
 
     let JD_senddate = () => {
-        $('.calendarinput').val($(".JDcalendarinput").val() !== "" ? $(".JDcalendarinput").val() : $('.calendarinput').val())
         $.ajax({
             url: "https://it-ir-appointment.visametric.com/en/appointment-form/senddate",
             type: "POST",
@@ -294,28 +293,74 @@
         });
     }
 
-    let addBtn = () => {
+    let jd_AddBtn = () => {
         $('.boardc').append(
-            '<div class="JD-MOD-button-container"></div>',
-            '<button id="getDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-            '<button id="sendDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>',
-            '<button id="calenderNext" class="btn btn-success" style="float: right; padding: 5px 10px;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>',
-            '<button id="sTimer" class="btn btn-success" style="float: right; padding: 5px 10px;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>',
-            '<input class="form-control JDcalendarinput" type="text" placeholder="mm-dd-yyyy" style="cursor: pointer; width: 120px;">'
+            `<div class="alert alert-warning JD-MOD-input-container" style="display: inline-block; position: relative;">
+            <input type="checkbox" id="jdCheckbox" style="
+                position: absolute;
+                left: 10px;
+                top: 5px;
+                right: 212px;
+                padding-right: 10px;
+                border-right-width: 10px;
+                margin-right: 0px;
+                height: 50px;
+                width: 16px;
+                border-top-width: 1px;
+                margin-top: 2px;
+                background-color: transparent;
+                margin-left: 11px;
+                "title="! Input date mannually with the following format dd-mm-yyyy !">
+            <input type="text" id="jdCalendarInput" class="form-control custom-input" placeholder="dd-mm-yyyy" style="
+                width: 137.66666px;
+                padding: 5px;
+                padding-left: 25px;
+                border-left-width: 1px;
+                margin-left: 30px;">
+            </div>
+            <div class="JD-MOD-button-container">
+            <button id="getDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Get Dates<span class="fa" style="margin-left: 10px;"></span></button>
+            <button id="sendDate" class="btn btn-success" style="float: left; padding: 5px 10px;">Send Dates<span class="fa" style="margin-left: 10px;"></span></button>
+            <button id="calenderNext" class="btn btn-success" style="float: right; padding: 5px 10px;">Calender Next<span class="fa" style="margin-left: 10px;"></span></button>
+            <button id="sTimer" class="btn btn-success" style="float: right; padding: 5px 10px;">Stop Timer<span class="fa" style="margin-left: 10px;"></span></button>
+            </div>`
         )
+        $("#jdCheckbox").prop("checked", true);
+        $("#jdCalendarInput").prop("disabled", true);
+        $("#jdCalendarInput").val("29-09-2023")
     }
 
-    let JD_Mod_Main = () => {
-        addBtn();
+    let jd_EventListeners = () => {
+
+        $("#jdCheckbox").on("click", () => {
+            let customDate = "29-09-2023"
+            $("#jdCheckbox").prop("checked") ? ($("#jdCalendarInput").prop("disabled", true), $("#jdCalendarInput").val(customDate)) : $("#jdCalendarInput").prop("disabled", false)
+        })
+
         $("#getDate").on("click", () => {
             JD_getdate();
             //scriptModifier.txtReplace(`totalperson: personCount`, `totalperson: \$(".totalPerson").val()`, "daterqfixed")
         });
-        $("#sendDate").on("click", () => { JD_senddate(); });
+
+        $("#sendDate").on("click", () => {
+            $('.calendarinput').val($("#jdCalendarInput").val() !== "" ? $("#jdCalendarInput").val() : $('.calendarinput').val());
+            $('.calendarinput').val() !== ""
+                ? JD_senddate()
+                : swal({
+                    title: "Warning",
+                    text: "Please select a Date!",
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: "OK",
+                    type: 'warning'
+                });
+        });
+
         $("#sTimer").on("click", () => {
             scriptModifier.scriptReplace(`document.getElementById("watch").innerHTML = "<b>" + minutes + "m " + seconds + "s </b>";`, `clearInterval(x);`, 'sTimer_script');
         });
+
         $("#calenderNext").on("click", () => { $('#btnAppCalendarNext').trigger("click"); });
+
         $(".input-group-addon").on("click", () => {
             $("#datepicker").datepicker({
                 maxViewMode: 2,
@@ -330,7 +375,12 @@
         })
     }
 
-    JD_Mod_Main();
+    let jd_Mod_Main = () => {
+        jd_AddBtn();
+        jd_EventListeners();
+    }
+
+    jd_Mod_Main();
 
     //----------------END OF JD MOD------------------------
 

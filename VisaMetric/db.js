@@ -225,7 +225,7 @@ let indxDB = {
 indxDB.open("MyDatabase", 1, "myStore", "readwrite")
   .then((store) => {
     // Data to be added
-    const newData = { id: 1, name: "John Doe", age: 30 };
+    //const newData = { id: 1, name: "John Doe", age: 30 };
 
     // Add data to the store
     return indxDB.put(store, newData);
@@ -250,4 +250,3 @@ let newData = {
     name1: "F U = fuck you"
 };
 indxDB.open("VisaMetric",1,"userdata").put(newData)
-
