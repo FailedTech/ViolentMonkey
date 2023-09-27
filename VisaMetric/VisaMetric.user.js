@@ -156,6 +156,7 @@
         $('.parentTotalFee').show();
         $('#paytype').show();
         $('#availableDayInfo').show();
+        //$("#atm").prop("checked", true);
         $("#atm").trigger("click");
         $("#paymentCardInput").val(6104338964005165);
         $("#popupDatepicker2").val("1402/06/11");
@@ -171,7 +172,7 @@
         $("#email1").val("elahefallahi.91@yahoo.com");
         PersonInfoForm($(".totalPerson").val());
         $('.preview').html($('.personalInfoDiv').clone()).find('input, select').attr('disabled', 'disabled').css('border', 'none');
-        $('#previewchk').trigger("click");
+        $('#previewchk').prop("checked", true);
 
     }
 
@@ -188,6 +189,17 @@
     let matchedSubdir = Object.keys(subdirList).find(key => key.split('|').find(path => path === pathName));
 
     matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
+
+    //---------------- CloudFlare && Err Checking -------------------------
+    let cloudFlareBadGateway = () => (document.querySelector(".inline-block")?.innerText || '').includes('Bad gateway Error code 502');
+    let navigationFailure = () => document.title === 'Not Allowed';
+    let navigateOrigin = () => location.href = location.origin;
+    let cloudFlare = () => !!(document.querySelector(".zone-name-title")?.innerText === location.hostname);
+    document.querySelector(".ctp-checkbox-label").click()
+
+    let navigationHandler = () => {
+    }
+
 
     //----------------Custom JD MOD------------------------
 
