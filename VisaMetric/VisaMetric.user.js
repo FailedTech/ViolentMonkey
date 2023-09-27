@@ -191,13 +191,14 @@
     matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
 
     //---------------- CloudFlare && Err Checking -------------------------
+    let cloudFlareCZone = () => typeof window._cf_chl_opt !== 'undefined' && 'cZone' in window._cf_chl_opt;
     let cloudFlareBadGateway = () => (document.querySelector(".inline-block")?.innerText || '').includes('Bad gateway Error code 502');
     let navigationFailure = () => document.title === 'Not Allowed';
     let navigateOrigin = () => location.href = location.origin;
-    let cloudFlare = () => !!(document.querySelector(".zone-name-title")?.innerText === location.hostname);
-    document.querySelector(".ctp-checkbox-label").click()
-
+    //document.querySelector(".ctp-checkbox-label").click()
     let navigationHandler = () => {
+    cloudFlareCZone() ? console.log("cloudFlareCZone() => " + window._cf_chl_opt.cZone) : null;
+    cloudFlareBadGateway() ? console.log("cloudFlareBadGateway() => Bad gateway Error code 502") : null;
     }
 
 
