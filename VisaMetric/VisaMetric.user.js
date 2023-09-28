@@ -45,10 +45,23 @@
     let liveToken = () => { console.log(`liveToken => current Token : ${$('meta[name="csrf-token"]').attr('content')}`) }
 
     //let home = () => { $("#nationalWorkingBtn").trigger("click"); }
-    let home = () => { $('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/NationalWorking').submit(); }
+    //let home = () => { $('#goAppointment').attr('action', 'https://it-ir-appointment.visametric.com/en/NationalWorking').submit(); }
+    let home = () => {
+        $.redirect('https://it-ir-appointment.visametric.com/en/NationalWorking', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            cpJvnsControl: ''
+        }, 'POST', null, false, false);
+    };
 
     //let nationalWorking = () => { $("#result1, #result3").trigger("click"); $("#btnSubmit").trigger("click"); };
-    let nationalWorking = () => { $("#formAccessApplication").prepend('<input type="hidden" name="nationality" value="Iran">').submit(); }
+    //let nationalWorking = () => { $("#formAccessApplication").prepend('<input type="hidden" name="nationality" value="Iran">').submit(); }
+    let nationalWorking = () => {
+        $.redirect('https://it-ir-appointment.visametric.com/en/appointment-form', {
+            nationality: 'Iran',
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            jvnsAccess: 'aT3g5o0i11'
+        }, 'POST', null, false, false);
+    };
 
     //let addSelectedOption = (id, className, val, txt) => {
     //    $(`#${id}`).length && ($(`#${id}`).append($('<option>', { value: val, text: txt }).attr('selected', 'selected')), className && $(`#${id}`).addClass(className));
@@ -190,19 +203,37 @@
 
     matchedSubdir ? (ipify(), subdirList[matchedSubdir]()) : console.log('No matching url:', pathName);
 
-    //---------------- CloudFlare && Err Checking -------------------------
+    //#region ---------------- CloudFlare && Err Checking -------------------------
     let cloudFlareCZone = () => typeof window._cf_chl_opt !== 'undefined' && 'cZone' in window._cf_chl_opt;
     let cloudFlareBadGateway = () => (document.querySelector(".inline-block")?.innerText || '').includes('Bad gateway Error code 502');
     let navigationFailure = () => document.title === 'Not Allowed';
     let navigateOrigin = () => location.href = location.origin;
     //document.querySelector(".ctp-checkbox-label").click()
-    let navigationHandler = () => {
-    cloudFlareCZone() ? console.log("cloudFlareCZone() => " + window._cf_chl_opt.cZone) : null;
-    cloudFlareBadGateway() ? console.log("cloudFlareBadGateway() => Bad gateway Error code 502") : null;
-    }
+    let pageState = {
+        200: () => {
+            console.log("go furture process")
+        },
+        429: () => {
+            // Custom handling for 429 here
+        },
+        502: () => {
+            pageState.navigationHandler()
+        },
+        //419 session expired
+        pageStatus: () => {
+            fetch(window.location.href)
+                .then(rpl => {
+                    pageState[rpl.status]();
+                })
+                .catch(err => {
+                    // Handle fetch error here
+                });
+        },
+    };
 
+    //#endregion ---------------- CloudFlare && Err Checking ----------------------
 
-    //----------------Custom JD MOD------------------------
+    //#region ----------------Custom JD MOD------------------------
 
     // execute the script with the id ==> eval(document.querySelector("#scriptId").textContent)
     let scriptModifier = {
@@ -395,6 +426,6 @@
 
     jd_Mod_Main();
 
-    //----------------END OF JD MOD------------------------
+    //#endregion --------------------END OF JD MOD------------------------
 
 })();
