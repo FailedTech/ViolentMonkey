@@ -186,6 +186,13 @@ $("#formAccessApplication").prepend('<input type="hidden" name="nationality" val
 // get serialize in json format personalForm is form id
 $('#personalForm').serializeArray().reduce((obj, item) => (obj[item.name] = item.value, obj), {});
 
+$.redirect(
+  'https://it-ir-appointment.visametric.com/en/appointment-form/personal/create',
+  $('#personalForm').serializeArray().reduce((obj, item) => (obj[item.name] = item.value, obj), {}),
+  'POST', "_blank", false, false
+);
+
+
 
 /* senddate response
 
