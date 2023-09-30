@@ -302,3 +302,21 @@ view_set_app_service_type:
 setnewcalendarstatus: 2
 
 */
+
+
+/* block outgoing request xhr
+(function () {
+
+    var blockedURL = "https://it-ir-appointment.visametric.com/en/appointment-form/getoffice";
+
+    // Intercept requests
+    var originalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url) {
+        if (url === blockedURL) {
+            console.warn("Blocked request to " + blockedURL);
+            return;
+        }
+        originalOpen.apply(this, arguments);
+    };
+})();
+*/
