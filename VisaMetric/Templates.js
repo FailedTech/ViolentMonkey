@@ -406,3 +406,18 @@ view_set_app_country:
 view_set_app_office:
 view_set_app_service_type:
 */
+
+
+
+/* disable eventlistener for any class or id
+$().off('change')
+$().off('click')
+
+***** add eventlistener to dynamically created class or id
+$(document).on('change', "#id  or .class", function() {
+    do something when created and this will trigger change to document
+    can change document with any element 
+    Note that the dynamically created element must be inside the parent node 
+});
+
+*/

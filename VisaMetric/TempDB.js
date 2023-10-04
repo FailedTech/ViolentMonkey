@@ -42,16 +42,24 @@ let setData = {
         $('input[name="nationality"]').on("click", (e) => sessionStorage.setItem('nationality', $(e.target).val()));
     },
     personalForm: () => {
-        Applicants.forEach(n => objIncrementor(n, 6, personalForm));
-        sessionStorage.setItem('applicationType', $('[name="applicationType"]').val());
-        sessionStorage.setItem('biofpval', $('[name="biofpval"]').val());
+        //Applicants.forEach(n => objIncrementor(n, 6, personalForm));
+        //sessionStorage.setItem('applicationType', $('[name="applicationType"]').val());
+        //sessionStorage.setItem('biofpval', $('[name="biofpval"]').val());
+        $('[name=personalForm]').on("change", (e) => { sessionStorage.setItem($(e.target).attr('name'), $(e.target).val()); });
         $('#ajaxcity').on("change", (e) => { sessionStorage.setItem('ajaxcity', $('#ajaxcity').html()); });
         $('#ajaxoffice').on("change", (e) => { sessionStorage.setItem('ajaxoffice', $('#ajaxoffice').html()); });
         $('#ajaxofficetype').on("change", (e) => { sessionStorage.setItem('ajaxofficetype', $('#ajaxofficetype').html()); });
+        $("#checkCardListDiv").on("change", (e) => {
+            sessionStorage.setItem('cardDatepicker',$('#popupDatepicker2').val())
+            sessionStorage.setItem('cardtransactionid',$(e.target).parent().next().html())
+          });
+          
 
+        /*
         Object.keys(personalForm).forEach(key => $(`[name=${key}]`).on((personalForm[key].event || "change"),
             (e) => sessionStorage.setItem((personalForm[key].key || key),
                 $((personalForm[key].val || e.target)).val())));
+        */
     },
     search: () => { Object.entries(setData).some(([key, func]) => $("#" + key).length && func()) }
 };
