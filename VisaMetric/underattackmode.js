@@ -3,7 +3,7 @@ let url = 'https://it-ir-appointment.visametric.com/en/appointment-form';
 
 
 async function sendFetchRequest() {
-  let startTime = Date.now(); 
+  let startTime = Date.now();
 
   // Use the fetch API with a timeout
   let responsePromise = fetch(url);
@@ -20,14 +20,14 @@ async function sendFetchRequest() {
   if (result.timedOut) {
     console.log('Fetch request timed out after 500ms. Performing a task...');
     // Perform your task here
-      $("#checkCardListBtn").trigger("click")
-	$("#sendDate").trigger("click")
-      $("#calenderNext").trigger("click")
-      $("#btnAppServicesNext").trigger("click")
-      $('#personalForm').submit();
-          console.log("Request Sent")
-      
-          console.log("Request Sent")
+    //$("#checkCardListBtn").trigger("click")
+    //$("#sendDate").trigger("click")
+    //$("#calenderNext").trigger("click")
+    //$("#btnAppServicesNext").trigger("click")
+    //$('#personalForm').submit();
+    console.log("Request Sent")
+
+    console.log("Request Sent")
   } else {
     // The fetch request completed within 500ms
     let response = await result; // Get the fetch response
